@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div class="posts">
+    <section class="post">
+      {% include 'partial/postheader.html' %}
+      {% include 'partial/postcontent.html' %}
+      {% include 'partial/posttags.html' %}
+    </section>
+  </div>
+
+  <div class="comments">
+    <section class="comment">
+
+    {% if edit or entry.hide_comments == False %}
+        {% include 'partial/comments.html' %}
+    {% endif  %}
+
+    </section>
+  </div>
+{% endblock %}

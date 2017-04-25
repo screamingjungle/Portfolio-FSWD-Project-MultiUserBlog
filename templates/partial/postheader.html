@@ -1,0 +1,30 @@
+      <header class="post-header">
+        <h2 class="post-title">
+{% if entry.author == userName and entry.sum_unauth_comments > 0 %}
+          <span class="post-category post-category-moderate">{{ entry.sum_unauth_comments }}</span>
+{% endif %}
+          <a href="/blog/{{entry.key().id()}}?view=me">{{entry.subject}}</a>
+        </h2>
+
+        <p class="post-meta">
+
+{% set totallikes = (entry.sum_likes - entry.sum_dislikes) %}
+{% if totallikes > 0 %}
+          <span class="post-category post-category-upvote">{{ totallikes }}</span>
+{% elif totallikes < 0 %}
+          <span class="post-category post-category-downvote" href="#">{{ totallikes }}</span>
+{% elif entry.sum_comments == 0 and entry.close_comments == False %}
+          <span class="post-category post-category-unanswered" href="#">Unanswered</span>
+{% elif entry.sum_comments == 0 %}
+          <span class="post-category post-category-closedcomments" href="#">quiet</span>
+{% else %}
+          <span class="post-category post-category-novote" href="#">unloved</span>
+{% endif %}
+
+{% if userName %}
+          By <a class="post-author" href="/search?author={{entry.author}}">{{entry.author}}</a> on
+{% endif %}
+          {{entry.created.strftime("%b %d, %Y")}}
+        </p>
+      </header>
+

@@ -1,0 +1,24 @@
+      {% if loggedIn == True %}
+      <div class="edit-options">
+          {% if entry.author == userName %}
+          {%    if not edit %}
+        <a class="edit" href="/blog/{{entry.key().id()}}" aria-label="Edit the post?"><i class="fa fa-edit" aria-hidden="true"></i></a>
+          {%    else %}
+        <a class="view" href="/blog/{{entry.key().id()}}?view=me" aria-label="View the post?"><i class="fa fa-eye" aria-hidden="true"></i></a>
+          {%    endif %}
+        <a class="delete" href="/blog/{{entry.key().id()}}/delete" aria-label="Delete the post?"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+          {% else %}
+
+              {% if not (entry.key().id() in score['likes']) %}
+        <a class="like" href="/blog/{{entry.key().id()}}/like" aria-label="Like the post?"><i class="fa fa-thumbs-o-up" aria-hidden="true"></i></a> 
+              {% endif  %}
+              {% if not (entry.key().id() in score['dislikes']) %}
+        <a class="dislike" href="/blog/{{entry.key().id()}}/dislike" aria-label="Dislike the post?"><i class="fa fa-thumbs-o-down" aria-hidden="true"></i></a> 
+              {% endif  %}
+
+          {% endif %}
+          {% if entry.close_comments == False and entry.hide_comments == False %}
+        <a class="add" href="#comment" aria-label="Add a new comment?"><i class="fa fa-comment-o" aria-hidden="true"></i></a>
+          {% endif %}
+      </div>
+      {% endif %}

@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Multi-User Blog">
+  <title>Multi-User Blog</title>
+
+  <link rel="stylesheet" href="https://unpkg.com/purecss@0.6.2/build/pure-min.css" integrity="sha384-" crossorigin="anonymous">
+
+  <!--[if lte IE 8]>
+    <link rel="stylesheet" href="https://unpkg.com/purecss@0.6.2/build/grids-responsive-old-ie-min.css">
+  <![endif]-->
+  <!--[if gt IE 8]><!-->
+    <link rel="stylesheet" href="https://unpkg.com/purecss@0.6.2/build/grids-responsive-min.css">
+  <!--<![endif]-->
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/static/blog.css">
+
+</head>
+
+<body>
+
+  <div id="layout" class="pure-g">
+    {% include 'partial/sidebar-left.html' %}
+
+    <div class="content pure-u-1 pure-u-md-3-4">
+      <div>
+
+
+        {% block content %}
+        {% endblock %}
+
+        <div class="footer">
+          <div class="pure-menu pure-menu-horizontal">
+            <ul>
+{% if userName: %}
+              <li class="pure-menu-item"><a href="/search?author={{ userName }}" class="pure-menu-link">My Posts</a></li>
+{% endif %}
+{% if DEBUG: %}
+              <li class="pure-menu-item">{{ self|pprint }}</li>
+{% endif %}
+              <li class="pure-menu-item"><a href="http://github.com/screamingjungle/" class="pure-menu-link">GitHub</a></li>
+            </ul>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+
+</body>
+
+</html>

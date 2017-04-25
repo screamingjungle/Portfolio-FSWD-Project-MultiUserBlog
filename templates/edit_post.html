@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div class="posts">
+    <h1>{% if entry.subject %}Edit Post{% else %}Insert New Post{% endif %}</h1>
+    <section class="post">
+
+{%    include 'partial/editcontent.html' %}
+
+    </section>
+  </div>
+{% endblock %}

@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+<!-- SAMPLE  -->
+        <div class="posts">
+          <h1 class="content-subhead">Pinned Post</h1>
+
+          <!-- A single blog post -->
+          <section class="post">
+            <header class="post-header">
+              <img width="48" height="48" alt="Tilo Mitra&#x27;s avatar" class="post-avatar" src="img/common/tilo-avatar.png">
+
+              <h2 class="post-title">Introducing Pure</h2>
+
+              <p class="post-meta">
+                By <a href="#" class="post-author">Tilo Mitra</a> under <a class="post-category post-category-design" href="#">CSS</a> <a class="post-category post-category-pure" href="#">Pure</a>
+              </p>
+            </header>
+
+            <div class="post-description">
+              <p>
+                Yesterday at CSSConf, we launched Pure - a new CSS library.
+                Phew! Here are the <a href="https://speakerdeck.com/tilomitra/pure-bliss">slides from the presentation</a>.
+                Although it looks pretty minimalist, we've been working on Pure for several months. After many iterations, we have released Pure as a set of small, responsive, CSS modules that you can use in every web project.
+              </p>
+            </div>
+          </section>
+        </div>
+<!-- END OF SAMPLE  -->
+
+{% block content %}
+  <div class="posts">
+    <h1 class="content-subhead">Recent Posts</h1>
+
+  {% for entry in entries %}
+    <section class="post">
+      {% include 'partial/postheader.html' %}
+
+      <div class="post-description">
+        <p>
+          {{ entry.content.replace('\n', '<br>') | truncate(trunc|int) | safe}}
+          {% if (entry.content|length) >= trunc|int %}
+            <a href="/blog/{{entry.key().id()}}?view=me">more</a>
+          {% endif %}
+        </p>
+      </div>
+      
+      {% include 'partial/posttags.html' %}
+<!--
+      {% include 'partial/postinfo.html' %}
+      {% include 'partial/editoptions.html' %}
+-->
+    </section>
+  {% endfor %}
+
+  </div>
+{% endblock %}

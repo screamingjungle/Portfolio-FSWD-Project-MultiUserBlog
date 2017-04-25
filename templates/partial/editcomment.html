@@ -1,0 +1,15 @@
+{% if entry.close_comments == False and entry.hide_comments == False %}
+  <form method="post">
+    <fieldset>
+  {% if not entry.auth_comments %}
+      <div class="moderated">comments are moderated</div>
+  {% endif  %}
+      <label>
+        <input type="text" name="comment" value="">
+      </label>
+      <a name="comment"/>
+      <input type="submit" name="submitcomment" value="Add Comment">
+      <div class="error">{{error}}</div>
+    </fieldset>
+  </form>
+{% endif  %}

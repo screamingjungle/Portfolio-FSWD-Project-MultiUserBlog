@@ -1,0 +1,38 @@
+    <div class="sidebar pure-u-1 pure-u-md-1-4">
+        <div class="header">
+            <h1 class="brand-title">
+{% if not (loggedIn == True) %}
+              Multi-User Blog
+{% else %}
+              Welcome {{userName}}
+{% endif %}
+            </h1>
+            <h2 class="brand-tagline">Creating a blog layout using Python, DataStore &amp, PureCSS</h2>
+
+            <nav class="nav">
+                <ul class="nav-list">
+                    <li class="nav-item">
+                        <a class="pure-button" href="/">Home</a>
+                    </li>
+{% if not (loggedIn == True) %}
+                    <li class="nav-item">
+                        <a class="pure-button" href="/login">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="pure-button" href="/signup">Register</a>
+                    </li>
+{% else %}
+                    <li class="nav-item">
+                        <a class="pure-button" href="/blog/0/">New Post</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="pure-button" href="/search?author={{userName}}">My Posts</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="pure-button logout-button" href="/logout">Logout</a>
+                    </li>
+{% endif %}
+                </ul>
+            </nav>
+        </div>
+    </div>

@@ -1,0 +1,35 @@
+application: blog
+version: 1
+runtime: python27
+api_version: 1
+threadsafe: yes
+
+handlers:
+- url: /static
+  static_dir: static
+
+- url: /.*
+  script: main.app
+
+libraries:
+- name: jinja2
+  version: latest
+
+- name: webapp2
+  version: latest
+
+env_variables:
+# DEBUG displays info - Prints Jinja2 template on frontend base.html footer
+  DEBUG: True
+
+# ITEMS_PER_PAGE: number of articles per web page
+  ITEMS_PER_PAGE: 10
+
+# POSTCHAR_CUTOFF_MAIN_PAGE: number of characters before Read More is displayed on index pages.
+  POSTCHAR_CUTOFF_MAIN_PAGE: 20
+
+# DEFAULT_BLOG_NAME: 
+  DEFAULT_BLOG_NAME: 'default_blog'
+
+# SECRET: key for salting hashes
+  SECRET: UdacityProject3SecretKey'

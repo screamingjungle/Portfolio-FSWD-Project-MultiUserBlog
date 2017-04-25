@@ -1,0 +1,20 @@
+{% if loggedIn == True %}
+      <div class="comment-options">
+    {% if entry.author == userName %}
+        {% if comment.authorised == False %}
+        <a class="moderate" href="/comment/{{comment.key().id()}}/authorise" aria-label="Authorise the comment?"><i class="fa fa-check-square-o" aria-hidden="true"></i></a> 
+        {% endif %}
+    {% endif %}
+    {% if entry.author == userName or comment.commenter_username == userName %}
+        <a class="delete" href="/comment/{{comment.key().id()}}/delete/" aria-label="Delete the comment?"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+    {% endif %}
+    {% if comment.commenter_username != userName %}
+        <a class="like" href="/comment/{{comment.key().id()}}/upvote" aria-label="Upvote the comment?"><i class="fa fa-thumbs-o-up" aria-hidden="true"></i></a> 
+        <a class="dislike" href="/comment/{{comment.key().id()}}/downvote" aria-label="Downvote the comment?"><i class="fa fa-thumbs-o-down" aria-hidden="true"></i></a> 
+    {% endif %}
+    {% if entry.close_comments == False %}
+        <a class="add" href="#comment" title="Add a new comment?" aria-label="Add a new comment?"><i class="fa fa-comment-o" aria-hidden="true"></i></a>
+    {% endif %}
+
+      </div>
+{% endif %}

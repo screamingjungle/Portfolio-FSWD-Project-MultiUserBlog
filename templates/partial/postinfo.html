@@ -1,0 +1,8 @@
+      <div class="post-info">
+        Likes: {{entry.sum_likes}}
+        Dislikes: {{entry.sum_dislikes}}
+{% if edit or entry.hide_comments == False %}
+        Comments: {{entry.sum_comments}}
+{% endif  %}
+        <div class="post-author">Author: {{entry.author}}</div>
+      </div>

@@ -1,0 +1,30 @@
+      <div class="post-description">
+
+        <form class="pure-form" id="blog" method="post">
+          <fieldset class="pure-group">
+            <input type="text" class="pure-input-1" name="subject" required placeholder="Subject" value="{% if entry.subject %}{{entry.subject}}{% endif %}">
+            <textarea class="pure-input-1" name="content" required placeholder="Enter your blog content here">{% if entry.content %}{{entry.content}}{% endif %}</textarea>
+            <input type="text" class="pure-input-1" name="tags" placeholder="Tags" value="{% if entry.tags %}{{ ','.join(entry.tags) }}{% endif %}">
+          </fieldset>
+
+          <fieldset>
+            <label for="option-one" class="pure-checkbox">
+              <input id="option-one" name="closecomments" type="checkbox" value="1" {% if entry.close_comments %} checked {% endif %}>
+              Close Comments
+            </label>
+
+            <label for="option-two" class="pure-checkbox">
+              <input id="option-two" name="hidecomments" type="checkbox" value="1" {% if entry.hide_comments %} checked {% endif %}>
+              Hide Comments
+            </label>
+
+            <label for="option-three" class="pure-checkbox">
+              <input id="option-three" name="authcomments" type="checkbox" value="1" {% if entry.auth_comments %} checked {% endif %}>
+              Auto Authorise Comments
+            </label>
+          </fieldset>
+
+          <button type="submit" name="submitblog" class="pure-button pure-input-1-2 pure-button-primary">{% if entry.subject %}Update{% else %}Insert{% endif %}</button>
+        </form>
+
+      </div>

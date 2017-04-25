@@ -1,0 +1,13 @@
+{% if entry.tags: %}
+  <div class="post-tags">
+    <ul class="list-unstyled tags blue">
+
+{%   for tag in entry.tags %}
+
+      <li><a href="/search?tag={{ tag | safe }}">{{ tag.strip( '_' ) | safe }}<span>></span></a></li>
+
+{%   endfor %}
+
+    </ul>
+  </div>
+{% endif  %}

@@ -1,0 +1,37 @@
+{% if comments: %}
+  <div class="comments">
+    <h1 class="content-subhead">Comments</h1>
+
+{%   for comment in comments %}
+    <section class="comment">
+
+      <header class="comment-header">
+        <p class="comment-meta">
+<span class="comment-category 
+{% if (comment.sum_likes - comment.sum_dislikes) > 0 %}
+ comment-category-upvote
+{% elif (comment.sum_likes - comment.sum_dislikes) < 0 %}
+ comment-category-downvote
+{% else %}
+ comment-category-novote
+{% endif %}
+">{{ comment.sum_likes - comment.sum_dislikes }}</a>
+</span>
+          By <a class="comment-author" href="/search?author={{comment.commenter_username}}">{{comment.commenter_username}}</a> on
+          {{comment.created.strftime("%b %d, %Y")}}
+        </p>
+      </header>
+
+      <div class="comment-description">
+        <p>
+          {{comment.comment.replace('\n', '<br>') | safe}}
+        </p>
+      </div>
+
+{% include 'partial/commentoptions.html' %}
+
+    </section>
+{%   endfor %}
+
+  </div>
+{% endif  %}

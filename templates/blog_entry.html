@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div class="posts">
+    <section class="post">
+
+      {% include 'partial/postheader.html' %}
+
+    {% if edit %}
+        {%    include 'partial/editcontent.html' %}
+    {% else %}
+        {%    include 'partial/postcontent.html' %}
+    {% endif  %}
+
+
+      {% include 'partial/posttags.html' %}
+
+<!--
+      {% include 'partial/postinfo.html' %}
+      
+-->
+      {% include 'partial/editoptions.html' %}
+    </section>
+  </div>
+
+    {% if edit or entry.hide_comments == False %}
+        {% include 'partial/comments.html' %}
+        {% include 'partial/editcomment.html' %}
+    {% endif  %}
+
+{% endblock %}

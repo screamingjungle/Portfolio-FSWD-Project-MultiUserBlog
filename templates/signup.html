@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+  <h2>Signup</h2>
+  <form class="pure-form" id="signup" method="post">
+    <fieldset class="pure-group">
+      <input type="text" class="pure-input-2" name="username" required placeholder="username" value="{{user_value}}">
+{% if errors.username_invalid %}
+      <span class="error">{{errors.username_invalid|e}}</span>
+{% endif %}
+      <input type="password" class="pure-input-2" name="password" required placeholder="password">
+      <span class="error">{{errors.password_invalid|e}}</span>
+
+      <input type="password" class="pure-input-2" name="verify" required placeholder="verify password">
+      <span class="error">{{errors.password_mismatch|e}}</span>
+
+      <input type="text" class="pure-input-2" name="email" placeholder="email address (optional)" value="{{ email_value }}">
+      <span class="error">{{errors.email_invalid|e}}</span>
+    </fieldset>
+
+{%  for key, value in errors.iteritems() %}
+    <div class="error">{{value|e}}</div>
+{% endfor %}
+
+    <input type="submit">
+  </form>
+
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+  <h2>Login</h2>
+  <form class="pure-form" id="login" method="post">
+    <fieldset class="pure-group">
+      <input type="text" class="pure-input-1" name="username" required placeholder="username" value={{userName}}>
+      <input type="password" class="pure-input-1" name="password" required placeholder="password">
+    </fieldset>
+    
+    <div class="error">{{login_error}}</div>
+
+    <input type="submit">
+  </form>
+
+{% endblock %}
