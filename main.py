@@ -26,7 +26,18 @@ DEBUG = os.environ.get('DEBUG', False)
 DEFAULT_BLOG_NAME = os.environ.get('DEFAULT_BLOG_NAME', 'default_blog')
 ITEMS_PER_PAGE = int(os.environ.get('ITEMS_PER_PAGE', 10))
 POSTCHAR_CUTOFF_MAIN_PAGE = int(os.environ.get('POSTCHAR_CUTOFF_MAIN_PAGE', 20))
-SECRET = os.environ.get('SECRET', 'UdacityProject3SecretKey')
+SECRET_KEY_FILE = os.environ.get('SECRET_KEY_FILE', 'secret.yaml')
+
+# load SECRET key from seperate file not tracked
+scfg = {}
+try:
+    with open(SECRET_KEY_FILE, 'r') as ymlfile:
+        scfg = yaml.load(ymlfile)
+except:
+    logging.error('Secret Key File missing: %s' % SECRET_KEY_FILE)
+    scfg['SECRET'] = os.environ.get('SECRET', 'UdacityProject3SecretKey')
+
+SECRET = scfg['SECRET']
 
 ERRLIST = {
                 "username_invalid": "That's not a valid username.",

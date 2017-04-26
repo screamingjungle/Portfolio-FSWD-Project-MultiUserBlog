@@ -53,7 +53,9 @@ Code conforms to the [Python Style Guide](https://www.python.org/dev/peps/pep-00
 4. Install the dependencies needed to run the app.
         $ pip install -r requirements.txt
 
-5. In the *app.yaml* file, modify *env_variables* section to suit your needs. Change the SECRET key.
+5. In the *app.yaml* file, modify *env_variables* section to suit your needs.
+
+6. Create a new file 'secret.yaml' to store your SECRET key. This overrides the app.yaml key.
 
 6. Follow instructions below for installing and setting up Google App Engine with the project.
 

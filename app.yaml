@@ -32,4 +32,5 @@ env_variables:
   DEFAULT_BLOG_NAME: 'default_blog'
 
 # SECRET: key for salting hashes
-  SECRET: UdacityProject3SecretKey'
+  SECRET_KEY_FILE: 'secret.yaml'
+  SECRET: 'UdacityProject3SecretKey'
