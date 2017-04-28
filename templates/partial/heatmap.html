@@ -1,0 +1,22 @@
+{% if heatmap: %}
+<div class="heatmap-container"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.12.0/moment.min.js" charset="utf-8"></script>
+<script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+<script src="/static/calendar-heatmap.js"></script>
+<script type="text/javascript">
+  var chartData = [
+{% for key, value in heatmap.iteritems() %}
+    {date: '{{ key|e }}', count: {{ value|e }}},
+{% endfor %}
+  ]
+  var heatmap = calendarHeatmap()
+    .data(chartData)
+    .selector('.heatmap-container')
+    .tooltipEnabled(true)
+    .colorRange(['#f4f7f7', '#79a8a9'])
+    .onClick(function (data) {
+      console.log('data', data);
+    });
+  heatmap();
+</script>
+{% endif  %}

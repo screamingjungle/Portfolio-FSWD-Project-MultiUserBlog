@@ -17,8 +17,11 @@ import logging
 
 from google.appengine.ext import db
 
+import datetime
+from collections import Counter
+
 template_dir = os.path.join(os.path.dirname(__file__), 'templates')
-jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir), 
+jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir),
                                autoescape = True)
 
 # Global constants
@@ -71,8 +74,8 @@ REGEXLIST = {
 
 def blog_key(name=DEFAULT_BLOG_NAME):
     """Constructs a Datastore key for a BlogEntry entity.
-    
-    This helps in showing recently updated info on screen. 
+
+    This helps in showing recently updated info on screen.
     Without stale info is seen shortly after an update.
     """
     return db.Key.from_path('blogs', name)
@@ -96,7 +99,7 @@ class User(db.Model):
 class BlogEntry(db.Model):
     ''' Blog post datastore model.
 
-        Includes totals for likes, dislikes to decrease datastore queries to 
+        Includes totals for likes, dislikes to decrease datastore queries to
         Likes model (e.g. on blog index pages with many blog scores).
 
         Attributes:
@@ -166,10 +169,11 @@ class BlogEntry(db.Model):
             q.fetch(ITEMS_PER_PAGE)
         return q
 
+
 class Comment(db.Model):
     ''' Comments datastore model.
 
-        Includes totals for likes, dislikes to decrease datastore calls to 
+        Includes totals for likes, dislikes to decrease datastore calls to
         Likes model (e.g. on blog entry page with many comments).
 
         Attributes:
@@ -205,7 +209,7 @@ class Likes(db.Model):
             post_type:       Post or Comment
             score:           +1 for like|upvote; -1 for dislike|downvote
             created:         Automatically generated DateTime.
-            last_modified:   Automatically generated DateTime when the post 
+            last_modified:   Automatically generated DateTime when the post
                              was updated.
     '''
     liker_username = db.StringProperty(required=True)
@@ -222,9 +226,9 @@ class Likes(db.Model):
 
 
 class Handler(webapp2.RequestHandler):
-    ''' This webapp2.RequestHandler class serves as the base Handler class 
+    ''' This webapp2.RequestHandler class serves as the base Handler class
         for classes in this application.
-        
+
         Included are methods for:
         - Datastore Queries
         - Error Handling
@@ -337,6 +341,48 @@ class Handler(webapp2.RequestHandler):
           if l:
               return l[0]
         return None
+
+    def daycounter(self, entries=[], daycount=Counter()):
+        for p in entries:
+            daycount += Counter({p.created.strftime("%Y-%m-%d"): 1})
+        return daycount
+
+
+    def get_author_activity(self, author=None, type='all'):
+        if author:
+            today = datetime.datetime.now()
+            year = today - datetime.timedelta(days=365)
+
+            daycount = Counter()
+
+            if type == 'all' or type == 'post':
+                q = BlogEntry.all()
+                q.ancestor(blog_key())
+                q.filter("author =", str(author))
+                q.filter('created >= ', year)
+                q.filter('created < ', today)
+                q.order("created")
+                entries = q.fetch(1000)
+
+                daycount = self.daycounter(entries, daycount)
+                #for p in entries:
+                #    daycount += Counter({p.created.strftime("%Y-%m-%d"): 1})
+
+
+            if type == 'all' or type == 'comment':
+                q = Comment.all()
+                q.ancestor(blog_key())
+                #q.filter("authorised =", True)
+                q.filter("commenter_username =", str(author))
+                q.filter('created >= ', year)
+                q.filter('created < ', today)
+                q.order("created")
+                entries = q.fetch(1000)
+
+                daycount = self.daycounter(entries, daycount)
+
+            return daycount
+        # TO DO: paging
 
     # SECURITY
     def validate_user(self):
@@ -554,7 +600,7 @@ class LikeBlogHandler(BlogHandler):
             like = self.has_user_liked(self.uid, ID, "post")
 
             if not like:
-                logging.info("LikeBlogHandler count = 0, ID = %s, score = %d" 
+                logging.info("LikeBlogHandler count = 0, ID = %s, score = %d"
                       % (ID, score))
                 le = Likes( parent=blog_key(),
                             liker_username = self.userName,
@@ -575,7 +621,7 @@ class LikeBlogHandler(BlogHandler):
                     like.score = 0
 
                 if score > int(like.score):  # Dislike to Like
-                    logging.info("UPDATING LIKE %d, score = %d  like = %d" 
+                    logging.info("UPDATING LIKE %d, score = %d  like = %d"
                         % (like.key().id(), score, like.score))
 
                     be.sum_dislikes -= 1
@@ -589,7 +635,7 @@ class LikeBlogHandler(BlogHandler):
                     return
 
                 elif score < int(like.score):  # Like to Dislike
-                    logging.warning("UPDATING DISLIKE %d, score = %d  like = %d" 
+                    logging.warning("UPDATING DISLIKE %d, score = %d  like = %d"
                         % (like.key().id(), score, like.score))
 
                     be.sum_dislikes += 1
@@ -603,7 +649,7 @@ class LikeBlogHandler(BlogHandler):
                     return
 
                 else:
-                    logging.warning("NO LIKE CHANGE %d, score = %d  like = %d" 
+                    logging.warning("NO LIKE CHANGE %d, score = %d  like = %d"
                         % (like.key().id(), score, like.score))
 
             self.redirect("/blog/%d?view=me" % redir)
@@ -658,7 +704,7 @@ class LikeCommentHandler(Handler):
                 like.score = 0
 
             if score > int(like.score):  # Dislike to Like
-                logging.info("UPDATING LIKE %d, score = %d  like = %d" 
+                logging.info("UPDATING LIKE %d, score = %d  like = %d"
                     % (like.key().id(), score, like.score))
 
                 c.sum_dislikes -= 1
@@ -669,7 +715,7 @@ class LikeCommentHandler(Handler):
                 like.put()
 
             elif score < int(like.score):  # Like to Dislike
-                logging.info("UPDATING DISLIKE %d, score = %d  like = %d" 
+                logging.info("UPDATING DISLIKE %d, score = %d  like = %d"
                     % (like.key().id(), score, like.score))
 
                 c.sum_dislikes += 1
@@ -680,7 +726,7 @@ class LikeCommentHandler(Handler):
                 like.put()
 
             else:
-                logging.info("NO LIKE CHANGE %d, score = %d  like = %d" 
+                logging.info("NO LIKE CHANGE %d, score = %d  like = %d"
                     % (like.key().id(), score, like.score))
 
         self.redirect("/blog/%d?view=me" % redir)
@@ -821,7 +867,7 @@ class BlogEntryHandler(Handler):
 
             return
 
-        else: 
+        else:
             # public view - static cacheable content
             be = BlogEntry.by_id(int(ID))
 
@@ -901,14 +947,14 @@ class BlogEntryHandler(Handler):
 
 class SearchEntryHandler(Handler):
     ''' This class handles the search request for tags and authors.
-    
+
         Keyword search is not yet supported, only fulltext on BlogEntry.tags and BlogEntry.author
     '''
     def get(self, srch_kw=None):
         tag = self.request.get('tag')
         author = self.request.get('author')
 
-        if tag or author: # cannot search LIKE
+        if tag or author:
             q = BlogEntry.all()
             if author:
                 q.filter("author =", author)
@@ -929,10 +975,11 @@ class SearchEntryHandler(Handler):
                 loggedIn = self.loggedIn,
                 entries = entries,
                 score = r,
+                heatmap = self.get_author_activity(author),
                 trunc = POSTCHAR_CUTOFF_MAIN_PAGE
             )
 
-        else:
+        elif srch_kw: # cannot search LIKE keyword!
             #show empty search form
             logging.warning("SearchEntryHandler NOTHING TO SHOW")
             return
@@ -960,6 +1007,24 @@ class BlogHandler(Handler):
             trunc = POSTCHAR_CUTOFF_MAIN_PAGE
         )
 
+
+class ContributionHandler(Handler):
+    ''' This class handles the request for author contribution activity.
+
+        Inspiration from github contributions visual and D3.
+    '''
+    def get(self, author=None):
+        if author:
+            self.render(
+                "contribution.html",
+                author = author,
+                heatmap = self.get_author_activity(author),
+            )
+        else:
+            logging.warning("ContributionHandler NOTHING TO SHOW")
+            return
+
+
 app = webapp2.WSGIApplication([
     ('/', BlogHandler),
 
@@ -981,7 +1046,10 @@ app = webapp2.WSGIApplication([
     ('/blog/(\d+)/(downvote)/?', LikeBlogHandler),
 
     ('/search/?', SearchEntryHandler),
-    ('/search/(\s+)', SearchEntryHandler),
+    ('/search/(\w+)/?', SearchEntryHandler),
+
+    ('/contribution/(\w+)/?', ContributionHandler),
+    ('/contribution/?', ContributionHandler),
 
     ('/login/?', LoginHandler),
     ('/signup/?', SignupHandler),

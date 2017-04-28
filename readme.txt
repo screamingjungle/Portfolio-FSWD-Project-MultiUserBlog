@@ -1,6 +1,6 @@
 # Multi-User Blog
 
-The goal of this project is to create a simple multi-user blog. 
+The goal of this project is to create a simple multi-user blog.
 
 Users should be able to create an account with login/logout functionality.
 Users can post an article and comment on other user posts.
@@ -34,6 +34,11 @@ Users features:
 - Users should only be able to edit/delete their own posts and their post comments.
 - Users can like/unlike posts or comments, but not their own.
 - Users can comment on any posts.
+- User activity calendar heatmap (inspired by github):
+    /contribution/author_username
+    sample calendar-heatmaps:
+    - [DKirwin](https://github.com/DKirwan/calendar-heatmap)
+    - [Gleb](https://github.com/g1eb/calendar-heatmap)
 
 Code conforms to the [Python Style Guide](https://www.python.org/dev/peps/pep-0008/)
 
@@ -65,7 +70,7 @@ Code conforms to the [Python Style Guide](https://www.python.org/dev/peps/pep-00
 2. [Install Google App Engine SDK](https://cloud.google.com/appengine/downloads#Google_App_Engine_SDK_for_Python).
 3. Open GoogleAppEngineLauncher.
 4. [Sign Up for a Google App Engine Account](https://appengine.google.com/).
-5. Create a new project in [Google’s Developer Console](https://console.cloud.google.com/) using a unique name.
+5. Create a new project in [Googleï¿½s Developer Console](https://console.cloud.google.com/) using a unique name.
 6. Create a new project from the file menu and choose this project's folder.
 7. Deploy this project by pressing deploy in GoogleAppEngineLauncher.
 
@@ -93,9 +98,13 @@ Incomplete Unit tests are available. Public pages have simple webpage tests.
 - Sort options: by votes, date
 - Better Error Handling
 - More Tests
+- calendar heatmap:
+    save svg to datastore/cache/disk on commit (post or comment)
+    bug in Firefox styling - temp fix but needs DKirwin fixes
+    investigate Google Chart using D3 lib.
+    responsive layout
 
 
 ### Bugs
 
 - SignupHandler: errors not ordered in template error summary
-

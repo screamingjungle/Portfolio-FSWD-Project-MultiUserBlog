@@ -34,6 +34,12 @@ indexes:
   properties:
   - name: author
   - name: created
+
+- kind: BlogEntry
+  ancestor: yes
+  properties:
+  - name: author
+  - name: created
     direction: desc
 
 - kind: BlogEntry
@@ -103,6 +109,12 @@ indexes:
     direction: desc
   - name: created
     direction: desc
+
+- kind: Comment
+  ancestor: yes
+  properties:
+  - name: commenter_username
+  - name: created
 
 - kind: Comment
   ancestor: yes

@@ -1,1 +1,4 @@
 WebTest==2.0.27
+Jinja2==2.9.6
+webapp2==2.5.2
+yaml==
